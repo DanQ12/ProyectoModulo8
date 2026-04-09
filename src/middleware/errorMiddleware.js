@@ -16,12 +16,29 @@ function errorMiddleware (err, req, res, next) {
         })
     }
 
-    //Incumplimiento de rstriccion unica
+    //Incumplimiento de restriccion unica
     if(err instanceof UniqueContraintError){
         return res.status(409).json({
             status: "error",
             message: "Ya existe un registro con esos datos unicos",
             data: null
+        })
+    }
+
+    //Tamaño de archivo muy grande
+    if(err.code === "LIMIT_FILE_SIZE"){
+        return res.status(400).json({
+            status: "error",
+            message: "El archivo supera el tamaño maximo permitido (5MB)"
+        })
+    }
+
+    //tipo de archivo no permitido en multer
+    if(err.message?.includes("Tipo de archivo no permitido")){
+        return res.status(400).json({
+            status: "error",
+            message: err.message,
+            data:null
         })
     }
 

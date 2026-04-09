@@ -1,4 +1,4 @@
-const {Routes} = require("express");
+const {Router} = require("express");
 const upload = require("../config/multer")
 const ctrl = require("../controllers/uploadController")
 const {authMiddleware, requireRole} = require("../middleware/authMiddleware");

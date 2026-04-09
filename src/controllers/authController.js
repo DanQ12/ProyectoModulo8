@@ -1,8 +1,10 @@
 //control de registro e inicio de sesion
+const bcrypt =require("bcryptjs")
+const jwt = require("jsonwebtoken")
 const {User} = require("../models")
 
 //Crea un usuario nuevo, oculta la informacion de su contraseña y devuelve un JWT
-async function register(res, req, next){
+async function register(req, res, next){
     try{
         const {nombre, email, password, telefono} = req.body;
 
@@ -24,22 +26,42 @@ async function register(res, req, next){
             })
         }
 
+
+        //Hashear la contraseña, usando un factor que balancea seguridad y velocidad
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+
         const user = await User.create({
             nombre,
             email,
-            password,
+            password: hashedPassword,
             telefono: telefono || null
         })
 
-        res.status(200).json({
-            status: "succes",
+        const token = jwt.sign(
+            {
+                id:user.id,
+                email: user.email,
+                rol: user, rol
+            },process.env.JWT_SECRETE,
+            {
+                expiresIn: process.env.JWT_EXPIRES_IN || "24h"
+            }
+        );
+
+        res.status(201).json({
+            status: "success",
             message: "Usuario registrado exitosamente.",
-            data: null
+            data: {
+                token,
+                user: {id: user.id, nombre: user.nombre, email: user.email, rol: user.rol}
+            }
         })
     }catch(err){
         next(err); //Envia al errorMiddleware
     }
 }
+
 //Login de usuario, verifica las credenciales
 async function login (req,res,next){
     try{
@@ -65,10 +87,31 @@ async function login (req,res,next){
             })
         }
 
+        const isValid = await bcrypt.compare(password, user.password);
+
+        if(!isValid){
+            return res.status(401).json({
+                status: "error",
+                message: "Credenciales inválidos",
+                data: null
+            })
+        }
+
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email,
+                rol: user.rol
+            }
+        );
+
         res.json({
             status: "success",
             message: "Inicio de sesion exitoso",
-            data: null
+            data: {
+                token,
+                user: {id: id.user, nombre: user.nombre, email: user.email, rol: user.rol, avatar: user.avatar}
+            }
         })
     }catch(err){
         next(err)
@@ -76,4 +119,29 @@ async function login (req,res,next){
 }
 
 
-module.exports = {register, login}
+//Obtener los datos del usuario, sin mostrar datos sensibles
+async function getMe(req,res,next){
+    try{
+        const user = await User.findByPk(req.user.id, {
+            attributes: {exclude: "password"}
+        });
+
+        if(!user){
+            return res.status(404).json({
+                status: "error",
+                message: "Usuario no encontrado",
+                data: null
+            })
+        }
+
+        res.json({
+            status: "success",
+            message: "Datos de usuario autenticados",
+            data: user
+        })
+    }catch(err){
+        next(err)
+    }
+}
+
+module.exports = {register, login, getMe}

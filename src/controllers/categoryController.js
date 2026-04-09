@@ -57,4 +57,77 @@ async function getById(req,res,next){
     }
 }
 
-module.exports = {getAll, getById}
+async function create (req, res, next){
+    try{
+        const {nombre, descripcion} = req.body;
+
+        if(!nombre){
+            return res.status(400).json({
+                status: "error",
+                message: "El nombre es obligatorio",
+                data: null
+            })
+        }
+
+        const category = await new Category.create({nombre, descripcion});
+        res.status(201).json({
+            status: "success",
+            message: "Categoría creada exitosamente",
+            data: category
+        })
+    }catch(err){
+        next(err)
+    }
+}
+
+
+//Actualizacion de categorias. Se actualizan solo los campos que llegan
+async function update (req,res,next){
+    try{
+        const category = await Category.findByPk(req.params.id);
+
+        if(!category){
+            return res.status(404).json({
+                status: "error",
+                message: "Categoria no encontrada",
+                data: null
+            })
+        }
+
+        await category.update(req.body);
+        res.json({
+            status: "success",
+            message: "Categoria actualizada",
+            data: category
+        })
+    }catch(err){
+        next(err)
+    }
+}
+
+
+//Borrar categoria
+async function remove(req,res,next){
+    try{
+        const category = await Category.findByPk(req.params.id)
+
+        if(!category){
+            return res.status(404).json({
+                status: "error",
+                message: "Categoria no encontrada",
+                data: null
+            })
+        }
+
+        await category.destroy();
+
+        res.json({
+            status: "success",
+            message: "Categoria eliminada",
+            data: null
+        })
+    }catch(err){
+        next(err)
+    } 
+}
+module.exports = {getAll, getById, create, update, remove}
