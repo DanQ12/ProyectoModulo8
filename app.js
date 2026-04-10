@@ -6,7 +6,7 @@ const express = require("express");
 const path = require("path");
 
 
-const {sequelize} = require("./src/models")
+const {sequelize, User} = require("./src/models")
 const routes = require("./src/routes");
 const loggerMiddleware = require("./src/middleware/loggerMiddleware");
 const errorMiddleware = require("./src/middleware/errorMiddleware");
@@ -65,9 +65,6 @@ async function startServer(){
         //Sincronizar los modelos sin borrar los datos
         await sequelize.sync({alter: true});
         console.log("✅ Modelos sincronizados con la base de datos")
-
-    
-
 
         app.listen(PORT, ()=>{
             console.log(`\n 🚀 Servidor iniciado: http://localhost:${PORT}`)

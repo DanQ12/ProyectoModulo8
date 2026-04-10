@@ -42,7 +42,7 @@ async function register(req, res, next){
             {
                 id:user.id,
                 email: user.email,
-                rol: user, rol
+                rol: user.rol
             },process.env.JWT_SECRETE,
             {
                 expiresIn: process.env.JWT_EXPIRES_IN || "24h"
@@ -102,7 +102,9 @@ async function login (req,res,next){
                 id: user.id,
                 email: user.email,
                 rol: user.rol
-            }
+            },
+            process.env.JWT_SECRETE,
+            {expiresIn: process.env.JWT_EXPIRES_IN || "24h"}
         );
 
         res.json({
@@ -110,7 +112,7 @@ async function login (req,res,next){
             message: "Inicio de sesion exitoso",
             data: {
                 token,
-                user: {id: id.user, nombre: user.nombre, email: user.email, rol: user.rol, avatar: user.avatar}
+                user: {id: user.id, nombre: user.nombre, email: user.email, rol: user.rol, avatar: user.avatar}
             }
         })
     }catch(err){
