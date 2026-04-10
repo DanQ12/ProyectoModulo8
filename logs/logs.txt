@@ -638,3 +638,9 @@
 [10-04-2026 4:17:17 a. m.] GET    /CSS/styles.css - IP: ::ffff:127.0.0.1
 [10-04-2026 4:17:21 a. m.] GET    /status - IP: ::ffff:127.0.0.1
 [10-04-2026 4:17:21 a. m.] GET    /favicon.ico - IP: ::ffff:127.0.0.1
+[10-04-2026 4:08:42 p. m.] GET    / - IP: ::ffff:127.0.0.1
+[10-04-2026 4:08:43 p. m.] GET    /CSS/styles.css - IP: ::ffff:127.0.0.1
+[10-04-2026 4:08:43 p. m.] GET    /JS/main.js - IP: ::ffff:127.0.0.1
+[10-04-2026 4:08:43 p. m.] GET    /status - IP: ::ffff:127.0.0.1
+[10-04-2026 4:08:43 p. m.] GET    /api/categories - IP: ::ffff:127.0.0.1
+[10-04-2026 4:08:43 p. m.] GET    /api/products? - IP: ::ffff:127.0.0.1
