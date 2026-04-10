@@ -256,7 +256,7 @@ function renderProducts(products){
     }
 
     grid.innerHTML = products.map(p => {
-        const imgContent = p.image ? `<img src="${p.image}" alt="${p.nombre}"/>`: `🧴`;
+        const imgContent = p.imagen ? `<img src="${p.imagen}" alt="${p.nombre}"/>`: `🧴`;
 
         return `<div class="product-card">
                     <div class="product-img">${imgContent}</div>

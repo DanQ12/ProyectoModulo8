@@ -9,6 +9,7 @@ if(!fs.existsSync(uploadsDir)){
     fs.mkdirSync(uploadsDir, {recursive:true})
 }
 
+//ruta de guardado de los archivos
 const storage = multer.diskStorage({
     destination: (req,file,cb)=>{cb(null, uploadsDir)},
     filename: (req, file, cb) => {
@@ -18,8 +19,10 @@ const storage = multer.diskStorage({
     }
 })
 
+
+//Filtrado por formatos de archivos, permitiendo solo los mas comunes
 const fileFilter = (req, file, cb) => {
-    const allowed = [`image/jpg`, `image/png`, `image/gif`, `image/webp`];
+    const allowed = [`image/jpeg`, `image/png`, `image/gif`, `image/webp`];
 
     if(allowed.includes(file.mimetype)){
         cb(null, true)
@@ -28,6 +31,8 @@ const fileFilter = (req, file, cb) => {
     }
 }
 
+
+//5MB de tamaño
 const upload = multer ({
     storage,
     fileFilter,
