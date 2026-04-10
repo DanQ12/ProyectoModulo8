@@ -30,7 +30,7 @@ const Product = sequelize.define("Product",{
         allowNull: false,
         defaultValue: 0,
         validate: {
-            min: {arg:[0], msg: "El stock no puede ser negativo"}
+            min: {args:[0], msg: "El stock no puede ser negativo"}
         }
     },
     fechaVencimiento:{

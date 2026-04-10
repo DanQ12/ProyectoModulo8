@@ -1,7 +1,4 @@
 //fronted de retail aseo, usa la API RES del back end para mostrar productos, manejar el carrito y permitir registro/login/log out
-
-const { json } = require("sequelize");
-
 const API = "/api"
 
 //Estado de la aplicacion-------------------------------------------------
@@ -131,7 +128,7 @@ function renderCart(){
             </div>
             <div class="cart-item-controls">
                 <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
-                <span class="qty-display">${item-qty}</span>
+                <span class="qty-display">${item.qty}</span>
                 <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
                 <button class="cart-item-remove" onclick="removeFromCart(${item.id})">🗑</button>
             </div>
@@ -179,7 +176,7 @@ document.getElementById("cart-btn").onclick = () => {
 }
 
 //toggle input de direccion para despacho
-document.querySelectorAll('[name = "TipoEntrega"}').forEach(radio => {
+document.querySelectorAll('[name = "tipoEntrega"]').forEach(radio => {
     radio.addEventListener("change", e => {
         document.getElementById("address-section").style.display = e.target.value === "despacho" ? "block":"none"
     })
@@ -253,7 +250,7 @@ function formatExpiry(dateStr){
 function renderProducts(products){
     const grid = document.getElementById("products-grid")
 
-    if(products.length() === 0){
+    if(products.length === 0){
         grid.innerHTML = `<p class="loading-msg">No se encontraron productos.</p>`
         return
     }
@@ -321,7 +318,7 @@ async function loadProducts(){
 }
 
 async function loadCategories(){
-    const {ok, data} = apiFetch("/categories");
+    const {ok, data} = await apiFetch("/categories");
 
     if(!ok){
         return
@@ -331,7 +328,7 @@ async function loadCategories(){
     data.data.forEach(cat => {
         const opt = document.createElement("option");
         opt.value = cat.id;
-        cat.textContent = cat.nombre;
+        opt.textContent = cat.nombre;
         select.appendChild(opt)
     })
 }
@@ -426,7 +423,7 @@ async function checkServerStatus(){
 
         document.getElementById("server-status").innerHTML = ok? `<span class="ok">✓ Servidor operativo</span>`: `<span class="fail">✗ Sin Conexión</span>`
     }catch {
-        document.getElementById("server-status").innerHTML = `<span class="fail>✗ Sin Conexión</span>`
+        document.getElementById("server-status").innerHTML = `<span class="fail">✗ Sin Conexión</span>`
     }
 }
 

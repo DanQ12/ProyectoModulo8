@@ -2,9 +2,9 @@
 
 const jwt = require("jsonwebtoken");
 
-//Extraccion yvalidacion del token que viene en el header, si es valido se adjunta el payload y se envia al siguiente paso, si nose responde con error 401
+//Extraccion y validacion del token que viene en el header, si es valido se adjunta el payload y se envia al siguiente paso, si nose responde con error 401
 
-//El token es almaccenado usando localStorage y se usa en cada pateicion de ruta protegida
+//El token es almacenado usando localStorage y se usa en cada pateicion de ruta protegida
 
 function authMiddleware(req,res,next){
     const authHeader = req.headers["authorization"];
@@ -22,8 +22,9 @@ function authMiddleware(req,res,next){
 
     try{
         //Revision si el token es invalido o esta expirado
-        const decoded = jwt.verify(token,process.env.JWT_SECRETE);
+        const decoded = jwt.verify(token, process.env.JWT_SECRETE);
         req.user = decoded; //fomrato {id, email, rol, iat, exp}
+
         next();
     }catch(err){
         const message = err.name === "TokenExpiredError"?"Token expirado. Por favor inicia sesion nuevamente.": "Token invalido.";
@@ -42,8 +43,12 @@ function authMiddleware(req,res,next){
 
 function requireRole(...roles){
     return (req,res,next) => {
+
+        console.log("req.user:", req.user)
+        console.log("roles:", roles)
+
         if(!req.user || !roles.includes(req.user.rol)){
-            return res.status(401).json({
+            return res.status(403).json({
                 status: "error",
                 message: "No tienes permisos para realizar esta accion",
                 data: null

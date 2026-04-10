@@ -12,6 +12,6 @@ router.use(authMiddleware);
 router.post("/avatar", upload.single("avatar"), ctrl.uploadAvatar);
 
 //Cambio imagenes de productos, solo disponible para admin
-router.post("/product/i:d", requireRole("admin"), upload.single("imagen"), ctrl.uploadProductImage)
+router.post("/product/:id", requireRole("admin"), upload.single("imagen"), ctrl.uploadProductImage)
 
 module.exports = router

@@ -28,7 +28,7 @@ async function getAll(req, res, next){
             data: categories
         })
     }catch(err){
-        next/(err)
+        next(err)
     }
 }
 
@@ -69,7 +69,7 @@ async function create (req, res, next){
             })
         }
 
-        const category = await new Category.create({nombre, descripcion});
+        const category = await Category.create({nombre, descripcion});
         res.status(201).json({
             status: "success",
             message: "Categoría creada exitosamente",
