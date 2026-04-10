@@ -191,7 +191,7 @@ document.getElementById("checkout-btn").onclick = async () => {
         return
     }
 
-    const tipoEntrega = document.querySelector('[name="tipoEntrega"]:checked').value;
+    const tipoEntrega = document.querySelector(`[name='tipoEntrega']:checked`).value;
     const direccionEntrega = document.getElementById("address-input").value.trim();
 
     if(tipoEntrega === "despacho" && !direccionEntrega){
@@ -201,7 +201,7 @@ document.getElementById("checkout-btn").onclick = async () => {
 
     const payload = {
         tipoEntrega,
-        direccionEntrega: tipoEntrega === "despacho"?direccionEntrega:null,
+        direccionEntrega: tipoEntrega === 'despacho'?direccionEntrega:null,
         items: state.cart.map(i => ({productId: i.id, cantidad: i.qty}))
     };
 
@@ -269,7 +269,7 @@ function renderProducts(products){
                         <div class="product-stock">Stock: ${p.stock} unidades</div>
                     </div>
                     <div class="product-footer">
-                        <button class="btn btn-primary btn-sm btn-block" onclick="addToCart(${JSON.stringify({id:p.id, nombre:p.nombre, precio: Number(p.precio), stock: p.stock})})" ${p.stock === 0 ? "disabled": ""}>
+                        <button class="btn btn-primary btn-sm btn-block" onclick='addToCart(${JSON.stringify({id:p.id, nombre:p.nombre, precio: Number(p.precio), stock: p.stock})})' ${p.stock === 0 ? "disabled": ""}>
                             ${p.stock === 0 ? "Sin Stock": "🛒 Agregar"}
                         </button>
                     </div>
